@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>login-test</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="worker.min.js"></script>
+    <script src="sdk.min.js"></script>
+    <script src="scripts/utils.js"></script>
+</head>
+<body style="margin: 0; font-family: Arial, sans-serif;">
+<div id="header">
+    <div class="buttonZone active">
+        <button class="button" id="signup" type="button" onclick="goTo('signup.html')">Signup</button>
+        <button class="button" id="login" type="button" onclick="goTo('login.html')">Login</button>
+    </div>
+    <div class="buttonZone">
+        <button class="button" id="logout" type="button">Logout</button>
+    </div>
+</div>
+<div id="body">
+    <form class="active" id="step1">
+        <input class="formElement" type="text" id="name" placeholder="name" required><br>
+        <input class="formElement" type="date" id="birthdate" placeholder="birthdate" required><br><br>
+        <input id="step1Button" class="button form" type="submit" value="Submit">
+    </form>
+    <form id="step2">
+        <input class="formElement" type="email" id="email" placeholder="email" required><br>
+        <input class="formElement" type="email" id="email2" placeholder="email2" required><br><br>
+        <input id="step2Button" class="button form" type="submit" value="Submit">
+    </form>
+    <form id="newUser">
+        <input class="formElement" type="password" id="password" placeholder="password" required><br>
+        <input class="formElement" type="password" id="password2" placeholder="password2" required><br><br>
+        <input id="newUserButton" class="button form" type="submit" value="Submit">
+    </form>
+</div>
+
+
+<style>
+    #header {
+        width: 100%;
+        height: 100px;
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: nowrap;
+        align-items: center;
+        border-bottom: 2px solid black;
+    }
+
+    .buttonZone {
+        display: none;
+    }
+
+    .active {
+        display: block;
+    }
+
+    form {
+        display: none;
+    }
+
+    .button {
+        position: relative;
+        margin-right: 15px;
+        width: 100px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    #body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 300px;
+    }
+
+    form {
+        text-align: center;
+        width: 200px;
+    }
+
+    .formElement {
+        height: 25px;
+        text-align: center;
+    }
+
+    .button.form {
+        width: 90%;
+        margin: auto;
+    }
+</style>
+<script src="/sdk.min.js"
+        onload="indigitall.init({ appKey: '94cb9c3e-0749-450f-8445-49bf2b269d8a', workerPath: '/worker.min.js', requestLocation: true})"
+        async></script>
+
+<script>
+    $(document).ready(function () {
+        Object.values(topicsCodes).forEach(topic => indigitall.topicsSubscribe([topic]));
+
+        var paginaActual = "signup.html";
+        window.history.replaceState({ page: paginaActual}, "", paginaActual);
+
+        $('#step1').submit(function (event) {
+            event.preventDefault();
+            var name = $('#name').val();
+            var date = $('#birthdate').val();
+            user.name = name;
+            user.birthdate = date;
+            submitSignUpFirstStep({name: name, birthdate: date});
+        });
+
+        $('#step2').submit(function (event) {
+            event.preventDefault();
+            var email = $('#email').val();
+            var email2 = $('#email2').val();
+
+            if(!validateEmail(email, email2)) {
+                return;
+            }
+            user.email = email;
+            submitSignUpSecondStep({email: email});
+        });
+
+        $('#newUser').submit(function (event) {
+            event.preventDefault();
+            var password = $('#password').val();
+            var password2 = $('#password2').val();
+            if(!validatePassword(password, password2)) {
+                return;
+            }
+            user.password = password;
+            // Obviamente no se puede guardar la contraseña de esta manera tan simple
+            submitSignUpThirdStep({password: password});
+        });
+    });
+</script>
+</body>
+</html>

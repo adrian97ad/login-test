@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>login-test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="worker.min.js"></script>
+    <script src="sdk.min.js"></script>
+    <script src="scripts/utils.js"></script>
+</head>
+<body style="margin: 0; font-family: Arial, sans-serif;">
+<div id="header">
+    <div class="buttonZone active">
+        <button class="button" id="signup" type="button" onclick="goTo('signup.html')">Signup</button>
+        <button class="button" id="login" type="button">Login</button>
+    </div>
+    <div class="buttonZone">
+        <button class="button" id="logout" type="button">Logout</button>
+    </div>
+</div>
+<div id="body">
+    <form class="loginForm active">
+        <input class="formElement" type="email" id="email" name="email" placeholder="email"><br>
+        <input class="formElement" type="password" id="password" name="password" placeholder="password"><br><br>
+        <input class="button form" type="submit" value="Submit">
+    </form>
+    <div class="privateArea"><h1>Private Area</h1></div>
+</div>
+
+
+<style>
+    #header {
+        width: 100%;
+        height: 100px;
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: nowrap;
+        align-items: center;
+        border-bottom: 2px solid black;
+    }
+
+    .privateArea, .loginForm, .buttonZone {
+        display: none;
+    }
+
+    .active {
+        display: block;
+    }
+
+    .button {
+        position: relative;
+        margin-right: 15px;
+        width: 100px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    #body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 300px;
+    }
+
+    form {
+        text-align: center;
+        width: 200px;
+    }
+
+    .formElement {
+        height: 25px;
+        text-align: center;
+    }
+
+    .button.form {
+        width: 90%;
+        margin: auto;
+    }
+</style>
+<script src="/sdk.min.js" onload="indigitall.init({ appKey: '94cb9c3e-0749-450f-8445-49bf2b269d8a', workerPath: '/worker.min.js', requestLocation: true})" async></script>
+<script>
+
+    $(document).ready(function () {
+        if(!!window.history.state && window.history.state.page !== 'index.html') {
+            user = JSON.parse(localStorage.getItem('user'));
+            if(user.email.trim() !== '' && user.password.trim() !== '') {
+                $('.loginForm').toggleClass('active');
+                $('.privateArea').toggleClass('active');
+                $('.buttonZone').toggleClass('active');
+            }
+        }
+        var paginaActual = "login.html";
+        window.history.replaceState({ page: paginaActual}, "", paginaActual);
+
+        $('.loginForm').submit(function (event) {
+            event.preventDefault();
+            user.email = $('#email').val();
+            user.password = $('#password').val();
+            logIn();
+            $('.loginForm').toggleClass('active');
+            $('.privateArea').toggleClass('active');
+            $('.buttonZone').toggleClass('active');
+        });
+        $('#logout').click(function (event) {
+            event.preventDefault();
+            logOut();
+        });
+
+    });
+</script>
+</body>
+</html>
