@@ -57,44 +57,33 @@ function submitSignUpFirstStep(customData) {
 }
 
 function submitSignUpSecondStep(customData) {
-    indigitall.topicsUnsubscribe([topicsCodes.step2], (topics) => {
-        // success function
-        console.log(topics);
-        indigitall.sendCustomEvent({
-            eventType: eventsType.step2,
-            customData: customData, // add your data
-            async: false, // call this event sync/async
-        }, (response) => {
-            console.log(response);
-            $('#step2').toggleClass('active');
-            $('#newUser').toggleClass('active');
-        }, (error) => {
-            console.log(error);
-            alert('Ha ocurrido un error en el segundo paso');
-        });
+    indigitall.topicsUnsubscribe([topicsCodes.step2]);
+    indigitall.sendCustomEvent({
+        eventType: eventsType.step2,
+        customData: customData, // add your data
+        async: false, // call this event sync/async
+    }, (response) => {
+        console.log(response);
+        $('#step2').toggleClass('active');
+        $('#newUser').toggleClass('active');
     }, (error) => {
         console.log(error);
+        alert('Ha ocurrido un error en el segundo paso');
     });
-
 }
 
 function submitSignUpThirdStep(customData) {
-    indigitall.topicsUnsubscribe([topicsCodes.step3], (topics) => {
-        // success function
-        console.log(topics);
-        indigitall.sendCustomEvent({
-            eventType: eventsType.step3,
-            customData: customData, // add your data
-            async: false, // call this event sync/async
-        }, (response) => {
-            console.log(response);
-            logIn();
-        }, (error) => {
-            console.log(error);
-            alert('Ha ocurrido un error en el segundo paso');
-        });
+    indigitall.topicsUnsubscribe([topicsCodes.step3]);
+    indigitall.sendCustomEvent({
+        eventType: eventsType.step3,
+        customData: customData, // add your data
+        async: false, // call this event sync/async
+    }, (response) => {
+        console.log(response);
+        logIn();
     }, (error) => {
         console.log(error);
+        alert('Ha ocurrido un error en el segundo paso');
     });
 }
 
